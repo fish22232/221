@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Корзина покупок</title>
+    <!-- Font Awesome для иконок -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Подключение CSS -->
+    <link rel="stylesheet" href="css/cart.css">
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Вернуться в магазин
+        </a>
+        <h1>Корзина покупок</h1>
+    </div>
+
+    <div id="cartContainer">
+        <!-- Содержимое корзины будет добавлено через JavaScript -->
+    </div>
+
+    <!-- Секция управления адресами -->
+    <div class="address-section" id="addressSection" style="display:none;">
+        <h3>Адрес доставки</h3>
+        <div id="addressList"></div>
+        <button class="checkout-btn" id="addNewAddressBtn">Добавить новый адрес</button>
+    </div>
+</div>
+
+<!-- Индикатор загрузки -->
+<div id="loader" class="loader" style="display:none;"></div>
+<!-- Toast уведомления -->
+<div id="toast" class="toast"></div>
+
+<!-- Модальное окно: Ввод адреса доставки -->
+<div class="modal" id="addressModal">
+    <div class="modal-form">
+        <div class="modal-header">
+            <h2 id="addressModalTitle">Адрес доставки</h2>
+            <button class="close-modal" onclick="closeAddressModal()">&times;</button>
+        </div>
+        <form id="addressForm" onsubmit="submitAddress(event)">
+            <div class="input-group">
+                <input type="text" id="city" placeholder="Город" required>
+            </div>
+            <div class="input-group">
+                <input type="text" id="street" placeholder="Улица" required>
+            </div>
+            <div class="input-group">
+                <input type="text" id="house" placeholder="Дом" required>
+            </div>
+            <div class="input-group">
+                <input type="text" id="apartment" placeholder="Квартира" required>
+            </div>
+            <div class="input-group">
+                <input type="text" id="postcode" placeholder="Почтовый индекс" required>
+            </div>
+            <button type="submit" class="checkout-btn">Сохранить адрес</button>
+        </form>
+    </div>
+</div>
+
+<!-- Модальное окно: Выбор карты -->
+<div class="modal" id="cardSelectModal">
+    <div class="modal-form">
+        <div class="modal-header">
+            <h2>Оплата</h2>
+            <button class="close-modal" onclick="closeCardSelectModal()">&times;</button>
+        </div>
+        <form id="cardSelectForm" onsubmit="submitCardSelect(event)">
+            <div id="savedCardsContainer">
+                <!-- Сохранённые карты пользователя будут подгружены через JS -->
+            </div>
+            <div class="input-group">
+                <label><input type="radio" name="cardOption" value="new" checked> Новая карта</label>
+            </div>
+            <div id="newCardFields">
+                <div class="input-group">
+                    <input type="text" class="card-input" id="cardNumber" placeholder="Номер карты" maxlength="19" oninput="formatCardNumber(this)">
+                    <i class="card-type fas" id="cardType"></i>
+                    <div class="error-message" id="cardError"></div>
+                </div>
+                <div class="input-group">
+                    <input type="text" class="card-input" id="cardHolder" placeholder="Имя держателя карты" oninput="this.value = this.value.toUpperCase()">
+                    <div class="error-message" id="holderError"></div>
+                </div>
+                <div class="card-row">
+                    <div class="input-group">
+                        <input type="text" class="card-input" id="expiry" placeholder="ММ/ГГ" maxlength="5" oninput="formatExpiry(this)">
+                        <div class="error-message" id="expiryError"></div>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" class="card-input" id="cvv" placeholder="CVV" maxlength="3" oninput="this.value = this.value.replace(/\D/g,'')">
+                        <div class="error-message" id="cvvError"></div>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="checkout-btn submit-payment">Оформить покупку</button>
+        </form>
+    </div>
+</div>
+
+<!-- Подключение JavaScript -->
+<script src="js/cart.js"></script>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Подарочные карты - Ваш магазин</title>
+    <link rel="stylesheet" href="css/gift-cards.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+<!-- Шапка сайта -->
+<header class="header">
+    <div class="header-content">
+        <a href="/" class="logo">
+            <img src="https://cdn-icons-png.flaticon.com/512/1682/1682308.png" alt="TechnoLife">
+            <span class="logo-text">GiftCards</span>
+        </a>
+    </div>
+</header>
+
+<!-- Заголовок страницы -->
+<div class="page-title">
+    <h1>Подарочные карты</h1>
+    <p>Выберите идеальную подарочную карту для себя или своих близких</p>
+</div>
+
+<!-- Сетка подарочных карт -->
+<div class="gift-cards-grid">
+    <!-- Стандартная карта -->
+    <div class="gift-card card-standard">
+        <div class="card-content">
+            <h2 class="card-title">Стандартная карта</h2>
+            <div class="card-amount">100 000 ₸</div>
+            <p class="card-description">Идеальное начало для знакомства с нашим магазином</p>
+        </div>
+        <div class="card-buttons">
+            <button class="btn btn-buy">Купить</button>
+            <button class="btn btn-info" onclick="showCardDetails('standard')">Подробнее</button>
+        </div>
+    </div>
+
+    <!-- Серебряная карта -->
+    <div class="gift-card card-silver">
+        <div class="card-content">
+            <h2 class="card-title">Серебряная карта</h2>
+            <div class="card-amount">250 000 ₸</div>
+            <p class="card-description">Расширенные привилегии для постоянных клиентов</p>
+        </div>
+        <div class="card-buttons">
+            <button class="btn btn-buy">Купить</button>
+            <button class="btn btn-info" onclick="showCardDetails('silver')">Подробнее</button>
+        </div>
+    </div>
+
+    <!-- Золотая карта -->
+    <div class="gift-card card-gold">
+        <div class="card-content">
+            <h2 class="card-title">Золотая карта</h2>
+            <div class="card-amount">500 000 ₸</div>
+            <p class="card-description">Премиальное обслуживание и особые привилегии</p>
+        </div>
+        <div class="card-buttons">
+            <button class="btn btn-buy">Купить</button>
+            <button class="btn btn-info" onclick="showCardDetails('gold')">Подробнее</button>
+        </div>
+    </div>
+
+    <!-- Платиновая карта -->
+    <div class="gift-card card-platinum">
+        <div class="card-content">
+            <h2 class="card-title">Платиновая карта</h2>
+            <div class="card-amount">1 000 000 ₸</div>
+            <p class="card-description">VIP-статус и эксклюзивные предложения</p>
+        </div>
+        <div class="card-buttons">
+            <button class="btn btn-buy">Купить</button>
+            <button class="btn btn-info" onclick="showCardDetails('platinum')">Подробнее</button>
+        </div>
+    </div>
+
+    <!-- Бриллиантовая карта -->
+    <div class="gift-card card-diamond">
+        <div class="card-content">
+            <h2 class="card-title">Бриллиантовая карта</h2>
+            <div class="card-amount">1 500 000 ₸</div>
+            <p class="card-description">Элитный статус и персональное обслуживание</p>
+        </div>
+        <div class="card-buttons">
+            <button class="btn btn-buy">Купить</button>
+            <button class="btn btn-info" onclick="showCardDetails('diamond')">Подробнее</button>
+        </div>
+    </div>
+
+    <!-- Elite карта -->
+    <div class="gift-card card-elite">
+        <div class="card-content">
+            <h2 class="card-title">Elite карта</h2>
+            <div class="card-amount">2 000 000 ₸</div>
+            <p class="card-description">Максимальные привилегии и индивидуальный подход</p>
+        </div>
+        <div class="card-buttons">
+            <button class="btn btn-buy">Купить</button>
+            <button class="btn btn-info" onclick="showCardDetails('elite')">Подробнее</button>
+        </div>
+    </div>
+
+    <!-- VIP карта -->
+    <div class="gift-card card-vip">
+        <div class="card-content">
+            <h2 class="card-title">VIP карта</h2>
+            <div class="card-amount">5 000 000 ₸</div>
+            <p class="card-description">Безграничные возможности и особый статус</p>
+        </div>
+        <div class="card-buttons">
+            <button class="btn btn-buy">Купить</button>
+            <button class="btn btn-info" onclick="showCardDetails('vip')">Подробнее</button>
+        </div>
+    </div>
+
+    <!-- Supreme карта -->
+    <div class="gift-card card-supreme">
+        <div class="card-content">
+            <h2 class="card-title">Supreme карта</h2>
+            <div class="card-amount">10 000 000 ₸</div>
+            <p class="card-description">Абсолютно все привилегии и максимальный статус</p>
+        </div>
+        <div class="card-buttons">
+            <button class="btn btn-buy">Купить</button>
+            <button class="btn btn-info" onclick="showCardDetails('supreme')">Подробнее</button>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно с информацией о карте -->
+<div id="cardModal" class="modal">
+    <div class="modal-content">
+        <button class="close-modal" onclick="closeModal()">&times;</button>
+        <h2 id="modalTitle"></h2>
+        <div id="modalContent"></div>
+    </div>
+</div>
+
+<!-- Платежное модальное окно -->
+<div class="modal" id="paymentModal">
+    <div class="modal-content payment-modal">
+        <button class="close-modal" onclick="closePaymentModal()">&times;</button>
+        <h2>Оплата подарочной карты</h2>
+        <form id="paymentForm" onsubmit="processPayment(event)">
+            <div class="payment-details">
+                <div class="payment-amount">
+                    <span>Сумма к оплате:</span>
+                    <span id="paymentAmount" class="amount"></span>
+                </div>
+
+                <div class="card-input-group">
+                    <label for="cardNumber">Номер карты</label>
+                    <input type="text" id="cardNumber" placeholder="0000 0000 0000 0000" maxlength="19" required>
+                </div>
+
+                <div class="card-row">
+                    <div class="card-input-group">
+                        <label for="expiryDate">Срок действия</label>
+                        <input type="text" id="expiryDate" placeholder="ММ/ГГ" maxlength="5" required>
+                    </div>
+                    <div class="card-input-group">
+                        <label for="cvv">CVV</label>
+                        <input type="password" id="cvv" placeholder="***" maxlength="3" required>
+                    </div>
+                </div>
+
+                <div class="card-input-group">
+                    <label for="cardHolder">Владелец карты</label>
+                    <input type="text" id="cardHolder" placeholder="IVAN IVANOV" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-pay">Оплатить</button>
+        </form>
+    </div>
+</div>
+
+<!-- Уведомление -->
+<div id="notification" class="notification"></div>
+
+<!-- Подключение JavaScript -->
+<script src="js/gift.js"></script>
+
+</body>
+</html>

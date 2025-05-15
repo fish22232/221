@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Новинки - TechnoLife</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/new.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+        <a href="../index.html" class="logo">
+            <img src="https://cdn-icons-png.flaticon.com/512/1682/1682308.png" alt="TechnoLife">
+            <span class="logo-text">TechnoLife</span>
+        </a>
+    </header>
+    <main>
+        <div class="section">
+            <div class="section-title"><i class="fas fa-star"></i> Новинки</div>
+            <button id="reloadBtn" style="margin-bottom:18px; background:#1e3c72; color:#fff; border:none; border-radius:8px; padding:10px 22px; font-size:1.1em; font-weight:bold; cursor:pointer; transition:background 0.2s;">Показать другие новинки</button>
+            <ul class="product-list" id="newProductList">
+                <!-- Новинки будут подставлены скриптом -->
+            </ul>
+        </div>
+        <script src="../products.js"></script>
+        <script>
+        // Получаем случайные новинки из products.js
+        function getRandomNewProducts(count = 4) {
+            // Берём последние 12 товаров из products.js как новинки
+            const newProducts = products.slice(-12);
+            const shuffled = newProducts.sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, count);
+        }
+        function renderNewProducts() {
+            const list = document.getElementById('newProductList');
+            const items = getRandomNewProducts();
+            list.innerHTML = items.map(p => `<li><b>${p.name}</b><br><span style='color:#888;'>${p.description}</span></li>`).join('');
+        }
+        document.getElementById('reloadBtn').onclick = renderNewProducts;
+        // Первичная загрузка
+        renderNewProducts();
+        </script>
+    </main>
+</body>
+</html>

@@ -1,0 +1,48 @@
+/* Стили для страницы О компании (about.html) TechnoLife */
+
+.section {
+    max-width: 800px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(30,60,114,0.10);
+    padding: 44px 36px 36px 36px;
+}
+.section-title {
+    font-size: 2.2em;
+    font-weight: bold;
+    color: #1e3c72;
+    margin-bottom: 22px;
+    text-align: center;
+    letter-spacing: 1px;
+}
+.about {
+    font-size: 1.15em;
+    color: #2a2a2a;
+    line-height: 1.7;
+}
+.about ul {
+    margin: 14px 0 14px 28px;
+    color: #1e3c72;
+    font-size: 1em;
+    list-style: disc inside;
+}
+.about b {
+    color: #1e3c72;
+}
+.about a {
+    color: #2a5298;
+    text-decoration: underline;
+}
+.about img {
+    margin-top: 18px;
+    opacity: 0.85;
+}
+@media (max-width: 600px) {
+    .section {
+        padding: 18px 6vw 18px 6vw;
+    }
+    .section-title {
+        font-size: 1.3em;
+    }
+}

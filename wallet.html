@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой кошелек - TechnoLife</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 15px 30px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #333;
+            transition: transform 0.3s;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .back-btn {
+            padding: 8px 15px;
+            border: none;
+            background: none;
+            color: #666;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 16px;
+        }
+
+        .back-btn:hover {
+            color: #2196F3;
+        }
+
+        .wallet-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .wallet-header {
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            border-radius: 15px;
+            padding: 30px;
+            color: white;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wallet-header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="40" stroke="white" stroke-width="2" fill="none" opacity="0.1"/></svg>') repeat;
+            opacity: 0.1;
+        }
+
+        .wallet-balance {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 20px 0;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .wallet-status {
+            display: inline-block;
+            padding: 8px 15px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        .bonus-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+            font-size: 16px;
+        }
+
+        .bonus-info i {
+            font-size: 20px;
+        }
+
+        .wallet-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .wallet-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .linked-card {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-header i {
+            font-size: 24px;
+        }
+
+        .card-content {
+            margin-bottom: 20px;
+        }
+
+        .card-info {
+            padding: 15px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            margin-top: 15px;
+        }
+
+        .card-number {
+            font-family: monospace;
+            font-size: 18px;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #2196F3;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1976D2;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #2196F3;
+            color: #2196F3;
+        }
+
+        .btn-outline:hover {
+            background: #2196F3;
+            color: white;
+        }
+
+        .transaction-history {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+
+        .transaction-list {
+            list-style: none;
+        }
+
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .transaction-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .transaction-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .income { background: #4CAF50; }
+        .expense { background: #f44336; }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #666;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #2196F3;
+            box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.1);
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: white;
+            display: none;
+            animation: slideIn 0.3s ease;
+            z-index: 1001;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .wallet-balance {
+                font-size: 36px;
+            }
+
+            .wallet-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                padding: 15px;
+            }
+
+            .wallet-container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+<header class="header">
+    <div class="header-content">
+        <button class="back-btn" onclick="history.back()">
+            <i class="fas fa-arrow-left"></i>
+            Назад
+        </button>
+        <a href="index.html" class="logo">
+            <img src="https://cdn-icons-png.flaticon.com/512/1682/1682308.png" alt="TechnoLife">
+            <span>TechnoLife</span>
+        </a>
+    </div>
+</header>
+
+<div class="wallet-container">
+    <div class="wallet-header">
+        <h1>Мой кошелек</h1>
+        <div class="wallet-balance">0 ₸</div>
+        <span class="wallet-status">Стандартный статус</span>
+        <div class="bonus-info">
+            <i class="fas fa-gift"></i>
+            <span>Доступно бонусов: <strong>0</strong></span>
+        </div>
+    </div>
+
+    <div class="wallet-grid">
+        <div class="wallet-card linked-card">
+            <div class="card-header">
+                <h3>Привязанная карта</h3>
+                <i class="fas fa-credit-card"></i>
+            </div>
+            <div id="linkedCardInfo" class="card-info">
+                <div class="card-number">Нет привязанной карты</div>
+                <small>Перейдите в раздел "Мои карты" для привязки карты</small>
+            </div>
+            <button class="btn btn-outline" onclick="location.href='cards.html'" style="margin-top: 15px;">
+                <i class="fas fa-plus"></i>
+                Управление картами
+            </button>
+        </div>
+
+        <div class="wallet-card">
+            <div class="card-header">
+                <h3>Пополнение</h3>
+                <i class="fas fa-wallet"></i>
+            </div>
+            <div class="card-content">
+                <p id="topupMessage">Сначала привяжите карту для пополнения баланса</p>
+            </div>
+            <button class="btn btn-primary" onclick="showTopupModal()" id="topupBtn" disabled>
+                <i class="fas fa-plus"></i>
+                Пополнить
+            </button>
+        </div>
+    </div>
+
+    <div class="transaction-history">
+        <h2>История операций</h2>
+        <ul class="transaction-list" id="transactionList">
+            <!-- Транзакции будут добавлены через JavaScript -->
+        </ul>
+    </div>
+</div>
+
+<!-- Модальное окно пополнения -->
+<div class="modal" id="topupModal">
+    <div class="modal-content">
+        <h2>Пополнение баланса</h2>
+        <form id="topupForm" onsubmit="handleTopup(event)">
+            <div class="form-group">
+                <label for="amount">Сумма пополнения (₸)</label>
+                <input type="number" id="amount" min="100" step="100" required>
+            </div>
+            <div class="form-group">
+                <label>Карта списания</label>
+                <div id="cardForPayment" class="card-info" style="background: #f8f8f8; color: #333;"></div>
+            </div>
+            <button type="submit" class="btn btn-primary">Пополнить</button>
+        </form>
+    </div>
+</div>
+
+<div class="notification" id="notification"></div>
+
+<script>
+    // Функция для показа уведомлений
+    function showNotification(message, type = 'success') {
+        const notification = document.getElementById('notification');
+        notification.textContent = message;
+        notification.style.background = type === 'success' ? '#4CAF50' : '#f44336';
+        notification.style.display = 'block';
+        setTimeout(() => {
+            notification.style.display = 'none';
+        }, 3000);
+    }
+
+    // Получение данных карты
+    function getLinkedCard() {
+        const cardData = localStorage.getItem('linkedCard');
+        return cardData ? JSON.parse(cardData) : null;
+    }
+
+    // Обновление информации о привязанной карте
+    function updateCardInfo() {
+        const cardInfo = document.getElementById('linkedCardInfo');
+        const topupBtn = document.getElementById('topupBtn');
+        const topupMessage = document.getElementById('topupMessage');
+        const cardData = getLinkedCard();
+
+        if (cardData) {
+            cardInfo.innerHTML = `
+                <div class="card-number">**** **** **** ${cardData.number.slice(-4)}</div>
+                <div>Срок действия: ${cardData.expiry}</div>
+            `;
+            document.getElementById('cardForPayment').innerHTML = cardInfo.innerHTML;
+            topupBtn.disabled = false;
+            topupMessage.textContent = 'Выберите сумму для пополнения';
+        } else {
+            cardInfo.innerHTML = `
+                <div class="card-number">Нет привязанной карты</div>
+                <small>Перейдите в раздел "Мои карты" для привязки карты</small>
+            `;
+            topupBtn.disabled = true;
+            topupMessage.textContent = 'Сначала привяжите карту для пополнения баланса';
+        }
+    }
+
+    // Показ модального окна пополнения
+    function showTopupModal() {
+        document.getElementById('topupModal').style.display = 'block';
+    }
+
+    // Закрытие модального окна
+    window.onclick = function(event) {
+        const modal = document.getElementById('topupModal');
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    // Обработка пополнения
+    function handleTopup(event) {
+        event.preventDefault();
+        const amount = Number(document.getElementById('amount').value);
+
+        // Получаем текущий баланс
+        let balance = Number(localStorage.getItem('walletBalance')) || 0;
+        balance += amount;
+
+        // Сохраняем новый баланс
+        localStorage.setItem('walletBalance', balance);
+
+        // Добавляем транзакцию
+        addTransaction({
+            type: 'income',
+            amount: amount,
+            date: new Date(),
+            description: 'Пополнение баланса'
+        });
+
+        // Обновляем отображение
+        updateBalance();
+        document.getElementById('topupModal').style.display = 'none';
+        showNotification(`Баланс успешно пополнен на ${amount} ₸`);
+    }
+
+    // Обновление баланса
+    function updateBalance() {
+        const balance = Number(localStorage.getItem('walletBalance')) || 0;
+        document.querySelector('.wallet-balance').textContent = `${balance.toLocaleString()} ₸`;
+    }
+
+    // Добавление транзакции
+    function addTransaction(transaction) {
+        let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+        transactions.unshift(transaction);
+        localStorage.setItem('transactions', JSON.stringify(transactions));
+        updateTransactionHistory();
+    }
+
+    // Обновление истории транзакций
+    function updateTransactionHistory() {
+        const transactionList = document.getElementById('transactionList');
+        const transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+
+        transactionList.innerHTML = transactions.map(t => `
+            <li class="transaction-item">
+                <div class="transaction-info">
+                    <div class="transaction-icon ${t.type}">
+                        <i class="fas fa-${t.type === 'income' ? 'plus' : 'minus'}"></i>
+                    </div>
+                    <div>
+                        <div>${t.description}</div>
+                        <small>${new Date(t.date).toLocaleString()}</small>
+                    </div>
+                </div>
+                <div style="color: ${t.type === 'income' ? '#4CAF50' : '#f44336'}">
+                    ${t.type === 'income' ? '+' : '-'} ${t.amount.toLocaleString()} ₸
+                </div>
+            </li>
+        `).join('') || '<li>Нет операций</li>';
+    }
+
+    // Инициализация страницы
+    document.addEventListener('DOMContentLoaded', () => {
+        updateCardInfo();
+        updateBalance();
+        updateTransactionHistory();
+    });
+</script>
+</body>
+</html>

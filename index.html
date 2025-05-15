@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechnoLife - Магазин бытовой техники в Казахстане</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .gift-card-btn {
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: none;
+            color: white;
+            margin-right: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .gift-card-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .delivery-info .highlight {
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            margin: 5px;
+            animation: pulse 2s infinite;
+        }
+
+        .delivery-info {
+            padding: 15px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: #f8f8f8;
+        }
+
+        .delivery-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .delivery-item i {
+            font-size: 24px;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .chatbot-fab {
+            position: fixed;
+            right: 30px;
+            bottom: 30px;
+            left: auto;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4CAF50 0%, #2196F3 100%);
+            color: #fff;
+            border: none;
+            box-shadow: 0 8px 32px rgba(44,62,80,0.18);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            cursor: pointer;
+            z-index: 3000;
+            transition: box-shadow 0.3s, transform 0.2s, background 0.3s;
+            animation: chatbotFabAppear 0.7s cubic-bezier(.4,1.4,.6,1) both;
+        }
+        .chatbot-fab:hover {
+            box-shadow: 0 12px 36px rgba(33,150,243,0.25);
+            transform: scale(1.08) rotate(-6deg);
+            background: linear-gradient(135deg, #2196F3 0%, #4CAF50 100%);
+        }
+        @keyframes chatbotFabAppear {
+            from { opacity: 0; transform: translateY(40px) scale(0.8); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .chatbot-modal {
+            display: none;
+            position: fixed;
+            right: 40px;
+            bottom: 110px;
+            z-index: 4000;
+            width: 370px;
+            max-width: 95vw;
+            max-height: 80vh;
+            background: none;
+            align-items: flex-end;
+            justify-content: flex-end;
+        }
+        .chatbot-modal.open {
+            display: flex;
+            animation: chatbotModalIn 0.35s cubic-bezier(.4,1.4,.6,1) both;
+        }
+        @keyframes chatbotModalIn {
+            from { opacity: 0; transform: translateY(40px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .chatbot-modal-content {
+            background: linear-gradient(135deg, #1e1e1e 0%, #2d2d2d 100%);
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(44,62,80,0.18);
+            padding: 0;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1.5px solid #2196F3;
+        }
+        .chatbot-header {
+            background: linear-gradient(90deg, #2196F3 0%, #4CAF50 100%);
+            color: #fff;
+            font-weight: bold;
+            padding: 16px 20px 14px 20px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .chatbot-close {
+            position: absolute;
+            right: 18px;
+            top: 12px;
+            font-size: 28px;
+            color: #fff;
+            background: none;
+            border: none;
+            cursor: pointer;
+            z-index: 10;
+            transition: transform 0.2s;
+        }
+        .chatbot-close:hover {
+            transform: rotate(90deg) scale(1.1);
+        }
+        .chatbot-messages {
+            flex: 1;
+            padding: 18px 16px 10px 16px;
+            overflow-y: auto;
+            background: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 15px;
+            max-height: 320px;
+        }
+        .chatbot-message {
+            padding: 10px 16px;
+            border-radius: 16px;
+            max-width: 85%;
+            word-break: break-word;
+            box-shadow: 0 2px 8px rgba(33,150,243,0.07);
+            margin-bottom: 2px;
+            animation: chatbotMsgIn 0.3s cubic-bezier(.4,1.4,.6,1) both;
+        }
+        @keyframes chatbotMsgIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .chatbot-message.bot {
+            background: linear-gradient(90deg, #2196F3 0%, #4CAF50 100%);
+            color: #fff;
+            align-self: flex-start;
+        }
+        .chatbot-message.user {
+            background: #fff;
+            color: #222;
+            align-self: flex-end;
+        }
+        .chatbot-input-row {
+            display: flex;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            background: #23272b;
+            padding: 10px 10px 10px 14px;
+            align-items: center;
+            gap: 8px;
+        }
+        .chatbot-input {
+            flex: 1;
+            border: none;
+            border-radius: 14px;
+            padding: 10px 14px;
+            font-size: 15px;
+            background: #fff;
+            color: #222;
+            outline: none;
+            transition: box-shadow 0.2s;
+        }
+        .chatbot-input:focus {
+            box-shadow: 0 0 0 2px #2196F3;
+        }
+        .chatbot-send {
+            background: linear-gradient(135deg, #4CAF50 0%, #2196F3 100%);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .chatbot-send:hover {
+            background: linear-gradient(135deg, #2196F3 0%, #4CAF50 100%);
+            transform: scale(1.08);
+        }
+        @media (max-width: 600px) {
+            .chatbot-modal {
+                right: 0;
+                bottom: 0;
+                width: 100vw;
+                max-width: 100vw;
+            }
+            .chatbot-modal-content {
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Шапка сайта -->
+<header class="header">
+    <div class="header-content">
+        <a href="/" class="logo">
+            <img src="https://cdn-icons-png.flaticon.com/512/1682/1682308.png" alt="TechnoLife">
+            <span class="logo-text">TechnoLife</span>
+        </a>
+
+        <div class="search-bar">
+            <input type="text" class="search-input" placeholder="Поиск товаров..." id="searchInput">
+            <button class="search-btn">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+
+        <div class="header-actions">
+            <button class="gift-card-btn" onclick="location.href='gift-cards.html'">
+                <i class="fas fa-gift"></i>
+                <span>Подарочные карты</span>
+            </button>
+            <button class="action-btn" onclick="location.href='login.html'">
+                <i class="fas fa-user"></i>
+            </button>
+            <button class="action-btn" onclick="location.href='cart.html'">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-count">0</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Информация о доставке -->
+    <div class="delivery-info">
+        <div class="delivery-item highlight" style="background: linear-gradient(45deg, #4CAF50, #45a049);">
+            <i class="fas fa-truck"></i>
+            <span>Бесплатная доставка по всему Казахстану при заказе от 50 000 ₸</span>
+        </div>
+        <div class="delivery-item highlight" style="background: linear-gradient(45deg, #2196F3, #1976D2);">
+            <i class="fas fa-globe-asia"></i>
+            <span>Доставка по всему миру! Работаем со всеми странами</span>
+        </div>
+        <div class="delivery-item">
+            <i class="fas fa-clock"></i>
+            <span>Доставка в течение 1-3 дней</span>
+        </div>
+        <div class="delivery-item">
+            <i class="fas fa-shield-alt"></i>
+            <span>Официальная гарантия производителя</span>
+        </div>
+    </div>
+</header>
+
+<!-- Категории -->
+<div class="categories">
+    <div class="categories-list">
+        <a href="#" class="category-item" data-category="all">Все товары</a>
+        <a href="#" class="category-item" data-category="Холодильники">Холодильники</a>
+        <a href="#" class="category-item" data-category="Стиральные машины">Стиральные машины</a>
+        <a href="#" class="category-item" data-category="Посудомоечные машины">Посудомоечные машины</a>
+        <a href="#" class="category-item" data-category="Духовые шкафы">Духовые шкафы</a>
+        <a href="#" class="category-item" data-category="Микроволновки">Микроволновки</a>
+        <a href="#" class="category-item" data-category="Пылесосы">Пылесосы</a>
+        <a href="#" class="category-item" data-category="Кофемашины">Кофемашины</a>
+        <a href="#" class="category-item" data-category="Мелкая техника">Мелкая техника</a>
+    </div>
+</div>
+
+<!-- Сортировка и фильтры -->
+<div class="filters-container">
+    <div class="sort-container">
+        <select id="sortSelect" onchange="sortProducts(this.value)">
+            <option value="">Сортировка</option>
+            <option value="price-asc">По цене (возрастание)</option>
+            <option value="price-desc">По цене (убывание)</option>
+            <option value="name">По названию</option>
+            <option value="popular">По популярности</option>
+        </select>
+    </div>
+    <div class="price-filter">
+        <span>Цена:</span>
+        <input type="number" id="minPrice" placeholder="от" min="0">
+        <input type="number" id="maxPrice" placeholder="до">
+        <button onclick="applyPriceFilter()">Применить</button>
+    </div>
+</div>
+
+<!-- Боковое меню -->
+<button class="menu-btn" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+</button>
+
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-menu">
+        <h3>Меню</h3>
+        <a href="pages/actions.html" class="menu-item">
+            <i class="fas fa-percent"></i>
+            <span>Акции</span>
+        </a>
+        <a href="pages/new.html" class="menu-item">
+            <i class="fas fa-star"></i>
+            <span>Новинки</span>
+        </a>
+        <a href="pages/popular.html" class="menu-item">
+            <i class="fas fa-fire"></i>
+            <span>Популярное</span>
+        </a>
+        <a href="pages/installment.html" class="menu-item">
+            <i class="fas fa-credit-card"></i>
+            <span>Рассрочка</span>
+        </a>
+
+        <h3>Информация</h3>
+        <a href="pages/about.html" class="menu-item">
+            <i class="fas fa-info-circle"></i>
+            <span>О компании</span>
+        </a>
+        <a href="pages/delivery.html" class="menu-item">
+            <i class="fas fa-truck"></i>
+            <span>Доставка по Казахстану</span>
+        </a>
+        <a href="pages/contacts.html" class="menu-item">
+            <i class="fas fa-phone"></i>
+            <span>Контакты</span>
+        </a>
+        <a href="pages/service.html" class="menu-item">
+            <i class="fas fa-tools"></i>
+            <span>Сервисные центры</span>
+        </a>
+        <a href="pages/help.html" class="menu-item">
+            <i class="fas fa-question-circle"></i>
+            <span>Помощь</span>
+        </a>
+    </div>
+</div>
+
+<!-- Основной контент -->
+<main class="main-content" id="productsContainer">
+    <!-- Товары будут добавлены через JavaScript -->
+</main>
+
+<!-- Преимущества -->
+<section class="advantages">
+    <div class="advantage-item">
+        <i class="fas fa-credit-card"></i>
+        <h3>Удобная оплата</h3>
+        <p>Наличными, картой или в рассрочку</p>
+    </div>
+    <div class="advantage-item">
+        <i class="fas fa-medal"></i>
+        <h3>Гарантия качества</h3>
+        <p>Только оригинальная техника</p>
+    </div>
+    <div class="advantage-item">
+        <i class="fas fa-phone"></i>
+        <h3>Поддержка 24/7</h3>
+        <p>Всегда на связи</p>
+    </div>
+</section>
+
+<!-- Иконка чата (фиксированная справа внизу) -->
+<button class="chatbot-fab" id="chatbotFab" title="Задать вопрос">
+    <i class="fas fa-comments"></i>
+</button>
+<!-- Модальное окно чата -->
+<div class="chatbot-modal" id="chatbotModal">
+    <div class="chatbot-modal-content">
+        <button class="chatbot-close" id="chatbotClose" title="Закрыть чат">&times;</button>
+        <div class="chatbot-header">
+            <i class="fas fa-robot"></i> Онлайн-чат поддержки
+        </div>
+        <div class="chatbot-messages" id="chatbotMessages">
+            <div class="chatbot-message bot">Здравствуйте! Чем могу помочь?</div>
+        </div>
+        <form class="chatbot-input-row" id="chatbotForm" autocomplete="off">
+            <input type="text" id="chatbotInput" class="chatbot-input" placeholder="Введите сообщение..." required />
+            <button type="submit" class="chatbot-send"><i class="fas fa-paper-plane"></i></button>
+        </form>
+    </div>
+</div>
+
+<script type="module" src="js/chatbot-answers.js"></script>
+<script type="module" src="main.js"></script>
+<script type="module">
+import { getChatbotAnswer } from './js/chatbot-answers.js';
+
+// Открытие/закрытие чата
+const chatbotFab = document.getElementById('chatbotFab');
+const chatbotModal = document.getElementById('chatbotModal');
+const chatbotClose = document.getElementById('chatbotClose');
+const chatbotForm = document.getElementById('chatbotForm');
+const chatbotInput = document.getElementById('chatbotInput');
+const chatbotMessages = document.getElementById('chatbotMessages');
+
+chatbotFab.addEventListener('click', () => {
+    chatbotModal.classList.add('open');
+    setTimeout(() => chatbotInput.focus(), 200);
+});
+chatbotClose.addEventListener('click', () => {
+    chatbotModal.classList.remove('open');
+});
+window.addEventListener('keydown', e => {
+    if (e.key === 'Escape') chatbotModal.classList.remove('open');
+});
+chatbotForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const text = chatbotInput.value.trim();
+    if (!text) return;
+    addMessage(text, 'user');
+    chatbotInput.value = '';
+    setTimeout(() => {
+        const answer = getChatbotAnswer(text);
+        addMessage(answer, 'bot');
+    }, 600);
+});
+function addMessage(text, who) {
+    const msg = document.createElement('div');
+    msg.className = 'chatbot-message ' + who;
+    msg.textContent = text;
+    chatbotMessages.appendChild(msg);
+    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+}
+</script>
+
+<!-- Нижний колонтитул -->
+<footer>
+    <div class="footer-content">
+        <div class="footer-section">
+            <h4>Контакты</h4>
+            <p>Телефон: +7 (777) 123-45-67</p>
+            <p>Email: info@technolife.kz</p>
+        </div>
+        <div class="footer-section">
+            <h4>Адреса магазинов</h4>
+            <p>г. Алматы, ул. Абая, 150</p>
+            <p>г. Астана, пр. Республики, 45</p>
+        </div>
+        <div class="footer-section">
+            <h4>Мы в соцсетях</h4>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-telegram"></i></a>
+            </div>
+        </div>
+    </div>
+</footer>
+</body>
+</html>

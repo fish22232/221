@@ -1,0 +1,38 @@
+/* Стили для страницы Сервисные центры (service.html) */
+.section {
+    max-width: 700px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(30,60,114,0.10);
+    padding: 44px 36px 36px 36px;
+}
+.section-title {
+    font-size: 2.2em;
+    font-weight: bold;
+    color: #1e3c72;
+    margin-bottom: 22px;
+    text-align: center;
+    letter-spacing: 1px;
+}
+.service {
+    font-size: 1.13em;
+    color: #2a2a2a;
+    line-height: 1.7;
+}
+.service-list {
+    margin-top: 18px;
+    padding-left: 22px;
+    font-size: 1.05em;
+}
+.service-list li {
+    margin-bottom: 14px;
+}
+@media (max-width: 600px) {
+    .section {
+        padding: 18px 6vw 18px 6vw;
+    }
+    .section-title {
+        font-size: 1.3em;
+    }
+}

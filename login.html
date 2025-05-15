@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход в личный кабинет - TechnoLife</title>
+    <!-- Font Awesome для иконок -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Подключаем CSS -->
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+<header class="header">
+    <div class="header-content">
+        <a href="index.html" class="logo">
+            <img src="https://cdn-icons-png.flaticon.com/512/1682/1682308.png" alt="TechnoLife">
+            <span>TechnoLife</span>
+        </a>
+    </div>
+</header>
+
+<main class="main-content">
+    <div class="login-container">
+        <div class="login-header">
+            <h1>Вход в личный кабинет</h1>
+            <p>Войдите в аккаунт чтобы продолжить</p>
+        </div>
+
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label for="email">
+                    <i class="fas fa-envelope"></i>
+                    Email
+                </label>
+                <input type="email" id="email" required placeholder="Введите ваш email">
+            </div>
+
+            <div class="form-group">
+                <label for="password">
+                    <i class="fas fa-lock"></i>
+                    Пароль
+                </label>
+                <div class="password-input">
+                    <input type="password" id="password" required placeholder="Введите пароль">
+                    <button type="button" class="toggle-password" onclick="togglePassword()">
+                        <i class="far fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">
+                <i class="fas fa-sign-in-alt"></i>
+                Войти
+            </button>
+
+            <div class="register-link">
+                <p>Нет аккаунта? <a href="register.html">Зарегистрироваться</a></p>
+            </div>
+        </form>
+    </div>
+</main>
+
+<!-- Подключаем JavaScript -->
+<script src="js/login.js"></script>
+</body>
+</html>

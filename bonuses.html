@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мои бонусы - TechnoLife</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background: #f5f5f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            padding: 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #333;
+        }
+        .logo img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+            transition: transform 0.3s;
+        }
+        .logo span {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .main-content {
+            max-width: 420px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 4px 24px rgba(30,60,114,0.08);
+            padding: 36px 28px 28px 28px;
+        }
+        .bonuses-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #1e3c72;
+            text-align: center;
+            margin-bottom: 18px;
+        }
+        .bonuses-amount {
+            text-align: center;
+            font-size: 2.4em;
+            color: #2196F3;
+            font-weight: bold;
+            margin-bottom: 28px;
+        }
+        .promo-form {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        .promo-form input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #b0b8d1;
+            border-radius: 6px;
+            font-size: 1em;
+            outline: none;
+            transition: border 0.2s;
+        }
+        .promo-form input:focus {
+            border-color: #2196F3;
+        }
+        .promo-form button {
+            background: linear-gradient(90deg, #1e3c72, #2a5298);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 12px 20px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .promo-form button:hover {
+            background: linear-gradient(90deg, #2a5298, #1e3c72);
+        }
+        .promo-result {
+            margin-top: 18px;
+            text-align: center;
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+        .promo-result.success {
+            color: #1e7e34;
+        }
+        .promo-result.error {
+            color: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <img src="https://cdn-icons-png.flaticon.com/512/1682/1682308.png" alt="TechnoLife">
+                <span>TechnoLife</span>
+            </a>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="bonuses-title">Ваши бонусы</div>
+        <div class="bonuses-amount" id="bonusesAmount">0</div>
+        <form class="promo-form" id="promoForm" autocomplete="off">
+            <input type="text" id="promoInput" placeholder="Введите промокод" required>
+            <button type="submit">Активировать</button>
+        </form>
+        <div class="promo-result" id="promoResult"></div>
+    </main>
+    <script>
+        // Получение email текущего пользователя
+        function getCurrentUserEmail() {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            return user && user.email ? user.email : null;
+        }
+
+        // Получение и отображение бонусов пользователя
+        function getBonuses() {
+            const email = getCurrentUserEmail();
+            if (!email) return 0;
+            return parseInt(localStorage.getItem('bonuses_' + email) || '0', 10);
+        }
+        function setBonuses(amount) {
+            const email = getCurrentUserEmail();
+            if (!email) return;
+            localStorage.setItem('bonuses_' + email, amount);
+            document.getElementById('bonusesAmount').textContent = amount;
+        }
+        setBonuses(getBonuses());
+
+        // Загрузка промокодов из файла promokod.txt
+        let promoCodes = {};
+        fetch('promokod.txt')
+            .then(response => response.text())
+            .then(text => {
+                // Формат файла: КОД=БОНУС (по одной строке)
+                text.split('\n').forEach(line => {
+                    const [code, value] = line.trim().split('=');
+                    if (code && value) {
+                        promoCodes[code.trim().toUpperCase()] = parseInt(value.trim(), 10);
+                    }
+                });
+            });
+
+        // Обработка промокода
+        document.getElementById('promoForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const input = document.getElementById('promoInput');
+            const code = input.value.trim().toUpperCase();
+            const result = document.getElementById('promoResult');
+
+            if (promoCodes[code]) {
+                let bonuses = getBonuses();
+                bonuses += promoCodes[code];
+                setBonuses(bonuses);
+                result.textContent = `Промокод активирован! +${promoCodes[code]} бонусов`;
+                result.className = 'promo-result success';
+                // Чтобы нельзя было использовать один и тот же промокод повторно
+                delete promoCodes[code];
+            } else {
+                result.textContent = 'Промокод не найден или уже использован';
+                result.className = 'promo-result error';
+            }
+            input.value = '';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Привязка банковской карты - TechnoLife</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/card-attach.css">
+    <style>
+        /* Стили из card-attach.css */
+        .card-list {
+            margin-top: 30px;
+            display: grid;
+            gap: 20px;
+        }
+
+        .saved-card {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-info {
+            flex-grow: 1;
+        }
+
+        .delete-card {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            padding: 8px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .delete-card:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .card-form {
+            max-width: 400px;
+            margin: 40px auto;
+            background: #f7f7f7;
+            padding: 30px 24px 24px 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(30,60,114,0.08);
+        }
+
+        .form-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 18px;
+            color: #1e3c72;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: #2a5298;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #b0b8d1;
+            border-radius: 6px;
+            font-size: 1em;
+            outline: none;
+            transition: border 0.2s;
+        }
+
+        .form-group input:focus {
+            border-color: #2a5298;
+        }
+
+        .card-preview {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            border-radius: 12px;
+            padding: 18px 20px;
+            margin-bottom: 22px;
+            font-family: 'Courier New', Courier, monospace;
+            letter-spacing: 2px;
+        }
+
+        .card-preview .card-number {
+            font-size: 1.2em;
+            margin-bottom: 8px;
+        }
+
+        .card-preview .card-details {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.95em;
+        }
+
+        .attach-btn {
+            width: 100%;
+            background: linear-gradient(90deg, #1e3c72, #2a5298);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .attach-btn:hover {
+            background: linear-gradient(90deg, #2a5298, #1e3c72);
+        }
+
+        .notification {
+            display: none;
+            margin: 18px auto 0 auto;
+            max-width: 400px;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+        }
+        .notification.success {
+            background: #e0f7e9;
+            color: #1e7e34;
+        }
+        .notification.error {
+            background: #ffe0e0;
+            color: #c82333;
+        }
+    </style>
+</head>
+<body>
+<div class="card-form">
+    <div class="form-title">Привязка банковской карты</div>
+    <div class="card-preview">
+        <div class="card-number" id="numberPreview">**** **** **** ****</div>
+        <div class="card-details">
+            <span id="holderPreview">ИМЯ ФАМИЛИЯ</span>
+            <span id="expiryPreview">MM/ГГ</span>
+        </div>
+    </div>
+    <form id="cardForm" autocomplete="off">
+        <div class="form-group">
+            <label for="cardNumber">Номер карты</label>
+            <input type="text" id="cardNumber" maxlength="19" placeholder="0000 0000 0000 0000" required>
+        </div>
+        <div class="form-group">
+            <label for="expiryDate">Срок действия</label>
+            <input type="text" id="expiryDate" maxlength="5" placeholder="MM/ГГ" required>
+        </div>
+        <div class="form-group">
+            <label for="cvv">CVV</label>
+            <input type="password" id="cvv" maxlength="4" placeholder="***" required>
+        </div>
+        <div class="form-group">
+            <label for="cardHolder">Владелец (латиницей)</label>
+            <input type="text" id="cardHolder" maxlength="26" placeholder="IVAN IVANOV" required>
+        </div>
+        <button type="submit" class="attach-btn">Привязать карту</button>
+    </form>
+</div>
+<div id="notification" class="notification"></div>
+
+<script src="js/card-security.js"></script>
+<script>
+    class CardManager {
+        constructor() {
+            this.security = new CardSecurity();
+            this.initialize();
+        }
+
+        initialize() {
+            // Инициализация обработчиков событий
+            const form = document.getElementById('cardForm');
+            form.onsubmit = (e) => this.attachCard(e);
+
+            // Отображение сохраненных карт при загрузке
+            this.displaySavedCards();
+
+            // Добавляем обработчики для форматирования ввода
+            this.initializeInputFormatting();
+        }
+
+        initializeInputFormatting() {
+            const cardNumber = document.getElementById('cardNumber');
+            cardNumber.addEventListener('input', (e) => {
+                e.target.value = this.security.formatCardNumber(e.target.value);
+                // Обновляем превью
+                document.getElementById('numberPreview').textContent =
+                    e.target.value || '**** **** **** ****';
+            });
+
+            const expiryDate = document.getElementById('expiryDate');
+            expiryDate.addEventListener('input', (e) => {
+                e.target.value = this.security.formatExpiryDate(e.target.value);
+                // Обновляем превью
+                document.getElementById('expiryPreview').textContent =
+                    e.target.value || 'MM/ГГ';
+            });
+
+            const cardHolder = document.getElementById('cardHolder');
+            cardHolder.addEventListener('input', (e) => {
+                e.target.value = e.target.value.toUpperCase();
+                // Обновляем превью
+                document.getElementById('holderPreview').textContent =
+                    e.target.value || 'ИМЯ ФАМИЛИЯ';
+            });
+        }
+
+        async attachCard(e) {
+            e.preventDefault();
+
+            const cardData = {
+                number: document.getElementById('cardNumber').value,
+                expiry: document.getElementById('expiryDate').value,
+                cvv: document.getElementById('cvv').value,
+                holder: document.getElementById('cardHolder').value
+            };
+
+            // Валидация данных
+            if (!this.validateCardData(cardData)) {
+                return;
+            }
+
+            // Отправка данных на сервер
+            try {
+                const response = await fetch('/api/attach_card', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(cardData)
+                });
+                if (!response.ok) {
+                    // Если сервер вернул ошибку, показать текст ошибки
+                    const errorText = await response.text();
+                    let message = 'Ошибка при привязке карты';
+                    try {
+                        const errJson = JSON.parse(errorText);
+                        message = errJson.message || message;
+                    } catch {}
+                    this.showNotification(message, 'error');
+                    return;
+                }
+                const result = await response.json();
+                if (result.success) {
+                    this.saveCard(cardData);
+                    e.target.reset();
+                    this.displaySavedCards();
+                    this.showNotification('Карта успешно привязана');
+                } else {
+                    this.showNotification(result.message || 'Ошибка при привязке карты', 'error');
+                }
+            } catch (err) {
+                this.showNotification('Ошибка: ' + (err.message || err), 'error');
+            }
+        }
+
+        validateCardData(cardData) {
+            if (!this.security.validateCardNumber(cardData.number.replace(/\s/g, ''))) {
+                this.showNotification('Неверный номер карты', 'error');
+                return false;
+            }
+            if (!this.security.validateExpiryDate(cardData.expiry)) {
+                this.showNotification('Неверный срок действия карты', 'error');
+                return false;
+            }
+            if (!this.security.validateCVV(cardData.cvv)) {
+                this.showNotification('Неверный CVV код', 'error');
+                return false;
+            }
+            if (!this.security.validateCardHolder(cardData.holder)) {
+                this.showNotification('Неверное имя владельца', 'error');
+                return false;
+            }
+            return true;
+        }
+
+        saveCard(cardData) {
+            let cards = this.getSavedCards();
+            // Маскируем номер карты для хранения
+            const maskedNumber = cardData.number.replace(/\s/g, '').slice(-4);
+            const secureCardData = {
+                lastFour: maskedNumber,
+                expiry: cardData.expiry,
+                holder: cardData.holder
+            };
+            cards.push(secureCardData);
+            localStorage.setItem('savedCards', JSON.stringify(cards));
+        }
+
+        getSavedCards() {
+            return JSON.parse(localStorage.getItem('savedCards')) || [];
+        }
+
+        displaySavedCards() {
+            const cards = this.getSavedCards();
+            const container = document.querySelector('.card-form');
+
+            // Удаляем предыдущий список карт, если он есть
+            const existingList = container.querySelector('.card-list');
+            if (existingList) {
+                existingList.remove();
+            }
+
+            // Создаем новый список карт
+            const cardList = document.createElement('div');
+            cardList.className = 'card-list';
+
+            cards.forEach((card, index) => {
+                const cardElement = document.createElement('div');
+                cardElement.className = 'saved-card';
+                cardElement.innerHTML = `
+                    <div class="card-info">
+                        <div>**** **** **** ${card.lastFour}</div>
+                        <div>${card.holder}</div>
+                        <div>Срок действия: ${card.expiry}</div>
+                    </div>
+                    <button class="delete-card" onclick="cardManager.deleteCard(${index})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                `;
+                cardList.appendChild(cardElement);
+            });
+
+            container.appendChild(cardList);
+        }
+
+        deleteCard(index) {
+            let cards = this.getSavedCards();
+            cards.splice(index, 1);
+            localStorage.setItem('savedCards', JSON.stringify(cards));
+            this.displaySavedCards();
+            this.showNotification('Карта удалена');
+        }
+
+        showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.style.display = 'block';
+
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+    }
+
+    // Инициализация при загрузке страницы
+    let cardManager;
+    document.addEventListener('DOMContentLoaded', () => {
+        cardManager = new CardManager();
+        window.cardManager = cardManager; // Для доступа из HTML
+    });
+</script>
+</body>
+</html>

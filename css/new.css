@@ -1,0 +1,53 @@
+/* Стили для страницы Новинки (new.html) */
+.section {
+    max-width: 800px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(30,60,114,0.10);
+    padding: 44px 36px 36px 36px;
+}
+.section-title {
+    font-size: 2.2em;
+    font-weight: bold;
+    color: #1e3c72;
+    margin-bottom: 22px;
+    text-align: center;
+    letter-spacing: 1px;
+}
+.product-list {
+    list-style: none;
+    padding: 0;
+    font-size: 1.08em;
+}
+.product-list li {
+    margin-bottom: 18px;
+    color: #333;
+    background: #f7faff;
+    border-radius: 8px;
+    padding: 12px 16px;
+    box-shadow: 0 2px 8px rgba(30,60,114,0.04);
+}
+#reloadBtn {
+    background: #1e3c72;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 22px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-bottom: 18px;
+}
+#reloadBtn:hover {
+    background: #2a5298;
+}
+@media (max-width: 600px) {
+    .section {
+        padding: 18px 6vw 18px 6vw;
+    }
+    .section-title {
+        font-size: 1.3em;
+    }
+}

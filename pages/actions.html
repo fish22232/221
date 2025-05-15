@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Акции - TechnoLife</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/actions.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+        <a href="../index.html" class="logo">
+            <img src="https://cdn-icons-png.flaticon.com/512/1682/1682308.png" alt="TechnoLife">
+            <span class="logo-text">TechnoLife</span>
+        </a>
+    </header>
+    <main>
+        <div class="section">
+            <div class="section-title"><i class="fas fa-percent"></i> Акции и персональные предложения</div>
+            <div style="font-size:1.13em; color:#1e3c72; margin-bottom:18px; text-align:center;">
+                <i class="fas fa-calendar-day"></i> <b>Каждый день — новые скидки и бонусы!</b><br>
+                <span style="font-size:0.95em; color:#2a5298;">Заглядывайте почаще — персональные предложения обновляются ежедневно.</span>
+            </div>
+            <ul class="promo-list" id="promoList">
+                <!-- Динамические акции будут подставлены скриптом -->
+            </ul>
+            <div style="margin-top:24px; background:#f7faff; border-radius:10px; padding:18px 16px; color:#1e3c72;">
+                <b>Персональный бонус!</b><br>
+                При покупке любого товара из раздела <a href="popular.html" style="color:#2a5298; text-decoration:underline;">Популярное</a> — получите <span id="personalBonus" style="font-weight:bold; color:#2a5298;"></span> бонусных баллов на ваш счёт.<br>
+                <span style="font-size:0.95em; color:#2a5298;">Бонус начисляется автоматически после оплаты.</span>
+            </div>
+            <div style="margin-top:18px; background:#eaf7e0; border-radius:10px; padding:16px 14px; color:#1e7e34;">
+                <b>Подарок к следующей покупке!</b><br>
+                <span id="nextPromo" style="font-weight:bold; color:#388e3c;"></span>
+            </div>
+            <div style="margin-top:22px; text-align:center;">
+                <img src="https://cdn-icons-png.flaticon.com/512/1682/1682308.png" alt="TechnoLife" style="width: 70px; opacity: 0.8;">
+            </div>
+        </div>
+        <script>
+        // Динамические акции на каждый день
+        const dailyPromos = [
+            {icon:'fa-bolt', text:'Молниеносная скидка 15% на все блендеры только сегодня!'},
+            {icon:'fa-tv', text:'Скидка 10% на телевизоры Samsung, LG, TCL и Philips — только сегодня!'},
+            {icon:'fa-laptop', text:'-20% на ноутбуки ASUS, HP и Lenovo — акция дня!'},
+            {icon:'fa-snowflake', text:'Скидка 12% на кондиционеры и вентиляторы к лету!'},
+            {icon:'fa-gift', text:'Подарочный сертификат 200₸ при покупке любой кофемашины или мультиварки!'},
+            {icon:'fa-fire', text:'Горячая акция: -25% на мультиварки Redmond, Polaris и Moulinex!'},
+            {icon:'fa-headphones', text:'Скидка 18% на наушники Sony, JBL и Philips — только сегодня!'},
+            {icon:'fa-magic', text:'Секретная акция: промокод на 300₸ при покупке от 30 000₸ любой бытовой техники!'},
+            {icon:'fa-refrigerator', text:'Скидка 10% на холодильники Samsung, LG и Beko!'},
+            {icon:'fa-washing-machine', text:'Стиральные машины Bosch, LG, Indesit — скидка 12% только сегодня!'},
+            {icon:'fa-microwave', text:'Микроволновки Panasonic и LG — скидка 9% и подарок!'},
+            {icon:'fa-blender', text:'Блендеры Philips, Braun, Kitfort — скидка 14% и бонусы!'},
+            {icon:'fa-toaster', text:'Тостеры Redmond, Moulinex — скидка 11% и бесплатная доставка!'},
+            {icon:'fa-dishwasher', text:'Посудомоечные машины Bosch, Beko — скидка 13% только сегодня!'},
+        ];
+        // Выбор акции по дню недели
+        const today = new Date().getDay();
+        const promoList = document.getElementById('promoList');
+        const promo = dailyPromos[today % dailyPromos.length];
+        promoList.innerHTML = `<li><i class="fas ${promo.icon}" style="color:#2a5298;"></i> ${promo.text}</li>`;
+        // Персональный бонус (рандомно для пользователя)
+        const bonus = Math.floor(Math.random()*200+100); // 100-299
+        document.getElementById('personalBonus').textContent = `+${bonus}₸`;
+        // Персональный промокод на следующую покупку (отображается только после покупки)
+        function randomPromo() {
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789!@#$%';
+            let code = '';
+            for(let i=0;i<10;i++) code += chars[Math.floor(Math.random()*chars.length)];
+            return code;
+        }
+        // Проверяем, был ли совершен заказ (флаг в localStorage)
+        const promoBlock = document.getElementById('nextPromo');
+        if (localStorage.getItem('orderCompleted') === 'true') {
+            promoBlock.textContent = randomPromo();
+            promoBlock.parentElement.innerHTML = '<b>Подарок к следующей покупке!</b><br>Ваш персональный промокод: <span style="font-weight:bold; color:#388e3c;">' + promoBlock.textContent + '</span> — используйте его для дополнительной скидки или бонуса!';
+        } else {
+            promoBlock.textContent = '';
+            promoBlock.parentElement.innerHTML = '<b>Подарок к следующей покупке!</b><br><span style="color:#888;">Промокод появится после оформления заказа.</span>';
+        }
+        </script>
+    </main>
+</body>
+</html>

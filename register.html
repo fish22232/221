@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация - TechnoLife</title>
+    <link rel="stylesheet" href="css/register.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+<header class="header">
+    <div class="header-content">
+        <a href="index.html" class="logo">
+            <img src="https://cdn-icons-png.flaticon.com/512/1682/1682308.png" alt="TechnoLife">
+            <span>TechnoLife</span>
+        </a>
+    </div>
+</header>
+
+<main class="main-content">
+    <div class="register-container">
+        <div class="register-header">
+            <h1>Регистрация</h1>
+            <p>Создайте аккаунт для доступа к личному кабинету</p>
+        </div>
+
+        <form id="registerForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="name">
+                        <i class="fas fa-user"></i>
+                        Имя
+                    </label>
+                    <input type="text"
+                           id="name"
+                           required
+                           placeholder="Введите ваше имя"
+                           pattern="[А-Яа-яЁё\s-]+"
+                           title="Используйте только русские буквы">
+                </div>
+                <div class="form-group">
+                    <label for="surname">
+                        <i class="fas fa-user"></i>
+                        Фамилия
+                    </label>
+                    <input type="text"
+                           id="surname"
+                           required
+                           placeholder="Введите вашу фамилию"
+                           pattern="[А-Яа-яЁё\s-]+"
+                           title="Используйте только русские буквы">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">
+                    <i class="fas fa-envelope"></i>
+                    Email
+                </label>
+                <input type="email"
+                       id="email"
+                       required
+                       placeholder="Введите ваш email"
+                       pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                       title="Введите корректный email адрес">
+            </div>
+
+            <div class="form-group">
+                <label for="password">
+                    <i class="fas fa-lock"></i>
+                    Пароль
+                </label>
+                <div class="password-input">
+                    <input type="password"
+                           id="password"
+                           required
+                           placeholder="Придумайте пароль"
+                           pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
+                           title="Минимум 8 символов, включая буквы и цифры">
+                    <button type="button" class="toggle-password" onclick="togglePassword('password')">
+                        <i class="far fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">
+                    <i class="fas fa-lock"></i>
+                    Подтверждение пароля
+                </label>
+                <div class="password-input">
+                    <input type="password"
+                           id="confirmPassword"
+                           required
+                           placeholder="Повторите пароль">
+                    <button type="button" class="toggle-password" onclick="togglePassword('confirmPassword')">
+                        <i class="far fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+
+           
+
+            <div class="form-group agreement">
+                <label class="checkbox-label">
+                    <input type="checkbox" required>
+                    <span>Я согласен с <a href="#">условиями использования</a> и <a href="#">политикой конфиденциальности</a></span>
+                </label>
+            </div>
+
+            <button type="submit" class="submit-btn">
+                <i class="fas fa-user-plus"></i>
+                Зарегистрироваться
+            </button>
+
+            <div class="login-link">
+                <p>Уже есть аккаунт? <a href="login.html">Войти</a></p>
+            </div>
+        </form>
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-links">
+            <a href="#">О компании</a>
+            <a href="#">Контакты</a>
+            <a href="#">Помощь</a>
+            <a href="#">Политика конфиденциальности</a>
+        </div>
+        <div class="footer-copyright">
+            © 2024 TechnoLife. Все права защищены
+        </div>
+    </div>
+</footer>
+
+<script src="js/register.js"></script>
+</body>
+</html>

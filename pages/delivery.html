@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Доставка по Казахстану - TechnoLife</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/delivery.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+        <a href="../index.html" class="logo">
+            <img src="https://cdn-icons-png.flaticon.com/512/1682/1682308.png" alt="TechnoLife">
+            <span class="logo-text">TechnoLife</span>
+        </a>
+    </header>
+    <main>
+        <div class="section">
+            <div class="section-title"><i class="fas fa-truck"></i> Доставка по Казахстану и всему миру</div>
+            <div class="delivery" style="margin-bottom:18px;">
+                <b><i class="fas fa-globe"></i> Мы доставляем технику не только по всему Казахстану, но и по всему миру!</b><br><br>
+                <b>Бесплатная доставка</b> — при заказе от <span style="color:#1e3c72; font-weight:bold;">50 000₸</span>.<br>
+                Для заказов до 50 000₸ стоимость рассчитывается индивидуально.<br><br>
+                <b>Сроки:</b> <br>
+                <ul style="margin: 8px 0 0 18px; color:#1e3c72;">
+                    <li>Алматы и Астана: 1-3 дня</li>
+                    <li>Регионы Казахстана: 2-7 дней</li>
+                    <li>Международная доставка: 5-21 день (зависит от страны и способа)</li>
+                </ul>
+            </div>
+            <div style="margin-bottom:18px;">
+                <b><i class="fas fa-calculator"></i> Калькулятор стоимости доставки:</b><br>
+                <div style="margin-top:10px;">
+                    <label for="country" style="color:#2a5298;">Страна:</label>
+                    <select id="country" style="margin-right:10px;">
+                        <option value="Казахстан">Казахстан</option>
+                        <option value="Россия">Россия</option>
+                        <option value="Узбекистан">Узбекистан</option>
+                        <option value="Киргизия">Киргизия</option>
+                        <option value="США">США</option>
+                        <option value="Германия">Германия</option>
+                        <option value="Китай">Китай</option>
+                        <option value="Другая">Другая</option>
+                    </select>
+                    <label for="distance" style="color:#2a5298;">Расстояние (км):</label>
+                    <input type="number" id="distance" min="1" max="20000" value="100" style="width:80px;">
+                    <button onclick="calcDelivery()" style="margin-left:10px; background:#1e3c72; color:#fff; border:none; border-radius:6px; padding:6px 14px; cursor:pointer;">Рассчитать</button>
+                </div>
+                <div id="deliveryResult" style="margin-top:12px; color:#1e3c72; font-weight:bold;"></div>
+            </div>
+            <div style="margin-bottom:18px;">
+                <b><i class="fas fa-info-circle"></i> Как оформить доставку?</b><br>
+                <ul style="margin: 8px 0 0 18px; color:#1e3c72;">
+                    <li>Выберите нужный товар и оформите заказ на сайте</li>
+                    <li>Укажите адрес и страну доставки</li>
+                    <li>Оплатите удобным способом</li>
+                    <li>Ожидайте уведомление о статусе доставки</li>
+                </ul>
+            </div>
+            <div style="margin-top:22px; text-align:center;">
+                <img src="https://cdn-icons-png.flaticon.com/512/1682/1682308.png" alt="TechnoLife" style="width: 70px; opacity: 0.8;">
+            </div>
+        </div>
+        <script>
+        function calcDelivery() {
+            const country = document.getElementById('country').value;
+            const distance = parseInt(document.getElementById('distance').value);
+            let pricePerKm = 100; // 100₸ за 1 км по умолчанию
+            if (country === 'Казахстан') pricePerKm = 80;
+            if (country === 'Россия' || country === 'Узбекистан' || country === 'Киргизия') pricePerKm = 120;
+            if (country === 'США' || country === 'Германия' || country === 'Китай') pricePerKm = 200;
+            if (country === 'Другая') pricePerKm = 250;
+            let cost = distance * pricePerKm;
+            let result = `Стоимость доставки: <span style='color:#388e3c;'>${cost.toLocaleString('ru-RU')}₸</span>`;
+            if (cost === 0) result = 'Бесплатная доставка!';
+            if (cost > 0 && cost < 1000) result += ' (минимальная стоимость — 1000₸)';
+            if (cost < 1000) cost = 1000;
+            document.getElementById('deliveryResult').innerHTML = result;
+        }
+        </script>
+    </main>
+</body>
+</html>
